@@ -3,3 +3,6 @@ pandas
 dash
 flask
 scikit-learn
+lightgbm
+dash_bootstrap_components
+sklearn
