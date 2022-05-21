@@ -64,13 +64,13 @@ ind= go.Indicator(
 fig_jauge.add_trace(ind)
 
 fig_jauge.update_layout(paper_bgcolor='white',
-                        height=200, width=300,
+                        height=250, width=300,
                         font={'color': 'darkblue', 'family': 'Arial'},
-                        margin=dict(l=20, r=30, b=0, t=0, pad=0))
+                        margin=dict(l=0, r=0, b=0, t=0, pad=0))
 
 
 
-app = Dash(__name__)
+app = Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 
 dropdown1_scatter_test_df = dcc.Dropdown(
@@ -112,72 +112,90 @@ row0 = html.Div(children=[
 
 header = html.H2(children="Welcome to 👨 Gabriela's Dashboard ")
 
-row1 = html.Div(children=[
-    html.Img(src=app.get_asset_url('logo.png'), style={"display": "inline-block",
-                                                       "width": "10%", }),
-    html.Div(children=[
-        html.H2("🏠 Projet 7: Implémentez un modèle de scoring"),
-        dcc.Markdown(
-            '''L’entreprise intitulé **Prêt à dépenser**, souhaite mettre en œuvre un **outil de “scoring crédit”** pour calculer la probabilité qu’un client rembourse son crédit, 
-            puis classifie la demande en crédit accordé ou refusé. 
-            L’entreprise souhaite développer un **algorithme de classification** en s’appuyant sur des sources de données variées 
-            (données comportementales, données provenant d'autres institutions financières, etc.)
-           Prêt à dépenser décide de développer un **dashboard interactif**  
-           facilement exploitable par les chargés de relation client afin d’expliquer les décisions d’octroi de crédit, 
-           et de disposer des informations clients à explorer facilement.''',
-                     style={ 'white-space':'pre', 'fontSize': 20},),
-    ], style={"display": "inline-block", "margin-left": "100px",  "width": "60%", }),
 
-])
+# creation cards for row1: card_logo_row1 pour menu de gauche
+card_logo_row1 = dbc.Card(
+    dbc.CardImg(src=app.get_asset_url('logo.png'), top=False, bottom=True,
+                title="Logo entreprise Prêt à dépenser",
+                alt='Learn Dash Bootstrap Card Component'),)
 
-# Menu deroulant gauche pour obtenir info client!! attention!! seulement visualisation col21&22
-col21 = html.Div(children=[
-    html.H4("🔎 Selection ID Client"),
-    dcc.Dropdown(csv_test_df.SK_ID_CURR, id='id_client_input', placeholder="Select Client Principal",
+# creation cards for row1: card_main_row1 pour menu de gauche
+card_main_row1 = dbc.Card(
+    [
+        html.Div(children=[
+            html.H2("🏠 Projet 7: Implémentez un modèle de scoring"),
+            dcc.Markdown(
+                '''L’entreprise intitulé **Prêt à dépenser**, souhaite mettre en œuvre un **outil de “scoring crédit”** pour calculer la probabilité qu’un client rembourse son crédit, 
+                puis classifie la demande en crédit accordé ou refusé. 
+                L’entreprise souhaite développer un **algorithme de classification** en s’appuyant sur des sources de données variées 
+                (données comportementales, données provenant d'autres institutions financières, etc.)
+               Prêt à dépenser décide de développer un **dashboard interactif**  
+               facilement exploitable par les chargés de relation client afin d’expliquer les décisions d’octroi de crédit, 
+               et de disposer des informations clients à explorer facilement.''',
+                style={'white-space': 'pre', 'fontSize': 20}, ),
+        ], ),
+    ],
+    color="#cee1eb", outline=True,
+    style = {"margin-left": 0, "margin-right": 0,}
+)
+
+# creation cards for row2: card_main_row2 pour menu de gauche
+card_main_row2 = dbc.Card(
+    [
+         dbc.CardBody([
+                html.H4("🔎 Selection ID Client",  className="card-subtitle"),
+                html.Br(),
+                dcc.Dropdown(csv_test_df.SK_ID_CURR, id='id_client_input',  placeholder="Select Client Principal",
                  ),
-    html.Br(),
-    html.H4("📉 Jauge du Score Crédit ID Client", style={"background-color": "pink",}),
-    dcc.Graph(figure=fig_jauge, id="my_jauge",),
-], style={"border-style": "groove", 'display': 'inline-block', })
+                html.Br(),
+                html.Br(),
+                html.Br(),
+                html.Br(),
+                html.H4("📉 Jauge Score Crédit ID Client", className="card-subtitle", style={"background-color": "pink",}),
+                html.Br(),
+                dcc.Graph(figure=fig_jauge, id="my_jauge", )],
+             style={"border-style": "groove","margin-left":"auto", "margin-right":"auto",
+                    } ),
+    ],
+    color="#cee1eb",   # https://bootswatch.com/default/ for more card colors
+    style = {"margin-left": 0, "margin-right": 0,}
+    )
 
-# Partie droite, Reponse du menu de gauche
-col22 = html.Div(children=[
-    html.H3('👁️ Client : Informations descriptives et demande de prêt :', style={"background-color": "pink",}),
-    html.P('Selection du Client Principal:', style={"text-align": "left", "font-family": "Times New Roman"}),
-    dcc.Dropdown(csv_info_pret_client.SK_ID_CURR,
-                 id='id_client_info_input', placeholder="Select Client Principal",
-                 style={"width": "40%"}),
-    html.H3('Données personnelles du Client :', ),
-    dash_table.DataTable(csv_info_pret_client.to_dict('records'),
-                         [{"name": i, "id": i} for i in csv_info_pret_client.columns[1:9]],
-                         style_header={'backgroundColor': '#cee1eb', "font-family": "Times New Roman",},
-                         style_cell={'textAlign': 'center'},
-                         style_data={'backgroundColor': '#cee1eb', "font-family": "Times New Roman",},
-                         id='table1_info_client', ),
-    html.Br(),
-    html.H3('Données de la demande du crédit :', ),
-    dash_table.DataTable(csv_info_pret_client.to_dict('records'),
-                         [{"name": i, "id": i} for i in csv_info_pret_client.columns[9:14]],
-                         style_header={'backgroundColor': '#cee1eb',"font-family": "Times New Roman",
-                                       },
-                         style_cell={'textAlign': 'center'},
-                         style_data={'backgroundColor': '#cee1eb', "font-family": "Times New Roman",},
-                         id='table2_info_client', ),
-    html.Br(),
-    html.H3('📉 Prediction Solvabilité du Client:', style={"background-color": "pink",}),
-    dcc.Markdown(
-        "La prédiction de la probabilité que le Client rembourse le crédit est calculé "
-        "via une API spécifique avec LGBMClassifier, le meilleur modèle optimisé."
-        "Pour le Client  {id_client} le score calculé via l’API est :  **{score_client}** \n "
-        "L’algorithme de classification indique que la solvabilité du client est **{score_classe}** \n "
-        "Le prêt est accordé au Client : **{score_text}**",
-                 style={'white-space':'pre', 'fontSize': 18, "font-family": "Times New Roman",},
-                 id='id_client_output_2',  ),
-], style={'display': 'inline-block',
-          "font-family": "Times New Roman", 'fontSize': 18,
-          "margin-left": "200px",  "width": "55%",})
-
-row2 = html.Div(children=[col21, col22,], style={'margin-bottom':'50px', 'text-align':'center'})
+# creation cards for row2: card_question_row2 pour menu de droite
+card_question_row2 = dbc.Card([
+    dbc.CardBody([
+        html.H3('👁️ Client : Informations descriptives et demande de prêt :',
+            style={"background-color": "pink", }),
+        html.H4('Selection du Client Principal:', style={"text-align": "left", "font-family": "Times New Roman"}),
+        dcc.Dropdown(csv_info_pret_client.SK_ID_CURR, id='id_client_info_input',
+             placeholder="Select Client Principal", style={"width": "40%"}),
+        html.H4('Données personnelles du Client :', ),
+        dash_table.DataTable(csv_info_pret_client.to_dict('records'),
+                             [{"name": i, "id": i} for i in csv_info_pret_client.columns[1:9]],
+                             style_header={'backgroundColor': '#cee1eb', "font-family": "Times New Roman",'fontSize': 20, },
+                            style_cell={'textAlign': 'center'},
+                            style_data={'backgroundColor': '#cee1eb', "font-family": "Times New Roman", 'fontSize': 18,},
+                            id='table1_info_client',),
+        html.Br(),
+        html.H4('Données de la demande du crédit :', ),
+        dash_table.DataTable(csv_info_pret_client.to_dict('records'),
+                             [{"name": i, "id": i} for i in csv_info_pret_client.columns[9:14]],
+                             style_header={'backgroundColor': '#cee1eb', "font-family": "Times New Roman", 'fontSize': 20,},
+                            style_cell={'textAlign': 'center'},
+                            style_data={'backgroundColor': '#cee1eb', "font-family": "Times New Roman", 'fontSize': 18, },
+                             id='table2_info_client',),
+        html.Br(),
+        html.H3('📉 Prediction Solvabilité du Client:', style={"background-color": "pink", }),
+        dcc.Markdown(
+                "La prédiction de la probabilité que le Client rembourse le crédit est calculé "
+                "via une API spécifique avec LGBMClassifier, le meilleur modèle optimisé."
+                "Pour le Client  {id_client} le score calculé via l’API est :  **{score_client}** \n "
+                "L’algorithme de classification indique que la solvabilité du client est **{score_classe}** \n "
+                "Le prêt est accordé au Client : **{score_text}**",
+                style={'white-space': 'pre', 'fontSize': 20, "font-family": "Times New Roman", },
+                id='id_client_output_2',),
+        ]),
+    ], color="#cee1eb", )
 
 
 scatter_div= html.Div(children=[
@@ -190,12 +208,20 @@ bar_div = html.Div(children=[dropdown_bar_chart3, html.Br(),graph3],
 
 row3= html.Div(children=[scatter_div, bar_div, html.Br(), ],)
 
-layout = html.Div(children=[row0, header, html.Hr(), row1, html.Hr(), row2,html.Br(), html.Hr(), row3, html.Br(), html.Hr(),],
-                  style={"text-align": "center","background-color": "#cee1eb",
-                         "font-family": "Times New Roman",})
 
 
+layout = html.Div(children=[
 
+    row0, header, html.Hr(),
+    dbc.Row([dbc.Col(card_logo_row1, width={'size': 2, 'offset': 1}, ),
+             dbc.Col(card_main_row1, width={'size': 9, 'offset': 0}),],),
+    html.Hr(),
+    dbc.Row([dbc.Col(card_main_row2, width={'size': 2, 'offset': 1, },),
+             dbc.Col(card_question_row2, width=8),], justify="around"),
+    html.Hr(),
+    row3, html.Br(), html.Hr(),
+], style={"text-align": "center","background-color": "#cee1eb",
+          "font-family": "Times New Roman",})
 
 app.layout = layout
 
