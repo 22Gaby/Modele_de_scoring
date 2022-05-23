@@ -6,3 +6,4 @@ scikit-learn
 lightgbm
 dash_bootstrap_components
 sklearn
+dash_labs

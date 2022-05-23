@@ -5,7 +5,7 @@ import pickle
 from flask import Flask, render_template, send_file, url_for
 
 
-# lecture du df contenant les données test avec 173 features + best_modele_lgbm
+# lecture du dataframe contenant les données test avec 173 features + best_modele_lgbm
 df_test= pd.read_csv('./API/ressources/data_csv/df_test_features_173_500clients.csv')
 id_clients = list(df_test['SK_ID_CURR'])
 with open('./API/ressources/modele/model_best_lgbm.pickle', 'rb') as obj:
@@ -23,7 +23,7 @@ def calculate_score(id_client:int):
     '''
     Calcule le score du client à partir de son id avec best modele_lgbm
     :param id_client:
-    :return: score client
+    :return: score client, score_classe
     '''
     df_id_client = df_test[df_test['SK_ID_CURR'] == int(id_client)]
     X_test_id_client = df_id_client.drop('SK_ID_CURR', axis=1)

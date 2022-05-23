@@ -209,9 +209,8 @@ bar_div = html.Div(children=[dropdown_bar_chart3, html.Br(),graph3],
 row3= html.Div(children=[scatter_div, bar_div, html.Br(), ],)
 
 
-
+# definition layout
 layout = html.Div(children=[
-
     row0, header, html.Hr(),
     dbc.Row([dbc.Col(card_logo_row1, width={'size': 2, 'offset': 1}, ),
              dbc.Col(card_main_row1, width={'size': 9, 'offset': 0}),],),
@@ -226,7 +225,7 @@ layout = html.Div(children=[
 app.layout = layout
 
 
-# callback: IDclient --figure jauge -- score client
+# callback: Idclient --figure jauge -- score client
 @app.callback(
     Output('my_jauge', 'figure'),
     Input('id_client_input', 'value'))
