@@ -1,4 +1,5 @@
 #!/bin/sh
-virtualenv -p /usr/bin/python3 env
-./env/bin/activate
+rm -rf dev-env
+virtualenv --python=/usr/bin/python3.8 dev-env
+. ./dev-env/bin/activate
 pip install -r requirements.txt
