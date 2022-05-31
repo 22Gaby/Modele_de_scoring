@@ -3,12 +3,24 @@ import json
 import pandas as pd
 import pickle
 from flask import Flask, render_template, send_file, url_for
+from pathlib import Path
 
 
-# lecture du dataframe contenant les données test avec 173 features + best_modele_lgbm
-df_test= pd.read_csv('./API/ressources/data_csv/df_test_features_173_500clients.csv')
+origin_path=Path('./')
+ressources_path = origin_path.joinpath('ressources')
+modele_path = ressources_path.joinpath('modele')
+data_csv_path = ressources_path.joinpath('data_csv')
+
+ressources1_path = data_csv_path.joinpath('df_test_features_173_500clients.csv')
+modele1_path = modele_path.joinpath('model_best_lgbm.pickle')
+ressources2_path = data_csv_path.joinpath('df_info_pret_client_500clients.csv')
+
+
+df_test= pd.read_csv(ressources1_path)
+
+
 id_clients = list(df_test['SK_ID_CURR'])
-with open('./API/ressources/modele/model_best_lgbm.pickle', 'rb') as obj:
+with open(modele1_path, 'rb') as obj:
     modele_best = pickle.load(obj)
     print(modele_best)
 
@@ -36,13 +48,16 @@ def calculate_score(id_client:int):
     return dic
 
 
+
+
+
 @app.route("/csv_info_pret_client/")
 def csv_info_pret_client():
     '''
     Définition route pour acceder aux infos clients
     :return: file_csv
     '''
-    return send_file('./ressources/data_csv/df_info_pret_client_500clients.csv')
+    return send_file(ressources2_path)
 
 
 @app.route("/csv_df_test/")
@@ -51,7 +66,7 @@ def csv_df_test():
     Définition route pour acceder au dataframe avec données de test pour le modele
     :return: file_csv
     '''
-    return send_file('./ressources/data_csv/df_test_features_173_500clients.csv')
+    return send_file(ressources1_path)
 
 
 if __name__ == "__main__":
