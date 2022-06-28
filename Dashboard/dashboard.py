@@ -254,7 +254,7 @@ layout = html.Div(children=[
                                                       "margin-left":10,
                                                       }),
     dcc.Dropdown(csv_info_pret_client.SK_ID_CURR, id='id_client_info_input',
-                 placeholder="Select ID du Client Principal", style={"width": "60%",
+                 placeholder="320753", style={"width": "60%",
                                                                "margin-left":400,
                                                                }),
     html.Br(),
