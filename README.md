@@ -1,4 +1,4 @@
-# Projet7: Implémentez un modèle de scoring
+## Projet7: Implémentez un modèle de scoring
 
 ### Contexte du projet:
 La société financière, intitulé "Prêt à dépenser", propose des crédits à la consommation pour des personnes ayant peu ou pas du tout d'historique de prêt.
