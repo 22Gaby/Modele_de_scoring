@@ -12,4 +12,4 @@ L’entreprise souhaite mettre en œuvre un outil de “scoring crédit” pour 
 -	API - le code de déploiement des prédictions avec le meilleur modèle optimisé (utilisation FLASK);
 -	Dashboard – le dashboard interactif contenant le code de restitution des données clients, récupération de prédiction et visualisation des caractéristiques importantes pour les clients (utilisation DASH)
 
-## Le Dashboard interactif est déployé sur un serveur cloud et accessible online à l'adresse: http://162.19.76.116/
+## Le Tableau de bord interactif est déployé sur un serveur cloud et accessible online à l'adresse: http://162.19.76.116/
